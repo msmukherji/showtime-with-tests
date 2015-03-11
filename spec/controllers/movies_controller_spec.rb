@@ -4,10 +4,10 @@ describe MoviesController do
   render_views
 
   it "can list all the movies" do
-    1.upto 5 do
+    1.upto 5 do |i|
       FactoryGirl.create :movie
     end
-binding.pry
+
     get :index
 
     expect(response.code.to_i).to eq 200
