@@ -18,15 +18,46 @@ describe MoviesController do
     expect(json.last["title"]).to eq "Movie 5"
   end
 
-  it "lets users stream movies"
+  it "can stream movies if plan allows" do
+    u = FactoryGirl.create :user, age: 13, stream: true
+    login u
+   
+    movie = FactoryGirl.create :movie, rating: "pg-13"
+   
+    post :stream, movie_id: movie.id
+    # ^^ fails because u/u.age disapppears 
+    # at 2nd layer of user functions-- why?
+    expect(u.stream_movie).to eq true
+    #expect(response.code.to_i).to eq 200
 
+  end
 
-  it "lets users stream only age appropriate movies"
+  it "cant stream movies without streaming plan" do
+    u = FactoryGirl.create :user, age: 13, stream: false
+    login u
+   
+    movie = FactoryGirl.create :movie, rating: "pg-13"
+   
+    post :stream, movie_id: movie.id
+    expect(response.code.to_i).to eq 500
+  end
 
+  it "cant stream age inappropriate movies" do
+    u = FactoryGirl.create :user, age: 12, stream: true
+    login u
 
-  it "lets users check out movies"
+    movie = FactoryGirl.create :movie, rating: "r"
 
+    post :stream, movie_id: movie.id
+    expect(response.code.to_i).to eq 500
+  end
 
-  it "only lets users check out as many movies as their plan permits"
+  
+  it "can check out movies"
 
+  it "cant check out more movies than plan allows"
+
+  it "cant check out age inappropriate movies"
+
+  it "can check in movies"
 end
