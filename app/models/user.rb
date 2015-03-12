@@ -57,12 +57,11 @@ class User < ActiveRecord::Base
   end
 
   def stream_movie m
-    self.is_old_enough_to_watch m and self.stream
+    self.is_old_enough_to_watch(m) && self.stream
   end
 
   def check_out_movie m
     movies = self.movies.count
-
     unless movies >= self.plan.to_i
       if self.is_old_enough_to_watch m
         UserMovie.create(user_id: self.id, movie_id: m.id)
