@@ -43,5 +43,9 @@ describe User do
     expect(user.movies.count).to eq 0
   end  
 
+  it "is old enough to watch movie"
+
+  
+
 end
 

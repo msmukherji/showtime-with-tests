@@ -33,7 +33,7 @@ class User < ActiveRecord::Base
   # def Person.lookup_ancestors
   #   [self]
   # end
-  def self.is_old_enough_to_watch movie
+  def is_old_enough_to_watch movie
     #binding.pry
     rating = movie.rating
     # WHY DOESN'T IT KNOW THAT SELF IS THE USER CREATED BY FG?
@@ -57,19 +57,20 @@ class User < ActiveRecord::Base
   end
 
   def stream_movie m
-    if self.stream
-      if self.class.is_old_enough_to_watch m
-      # ^^ error saying age isn't a method on self
-      #if self.is_old_enough_to_watch m
-      # ^^ error saying is_old_enough_to_watch isn't a method on self
-        true
-      else
-        false
-      end
-    else
-      false
-    end
+    self.is_old_enough_to_watch m and self.stream
   end
+    #   #if self.class.is_old_enough_to_watch m
+    #   # ^^ error saying age isn't a method on self
+    #   if self.is_old_enough_to_watch m
+    #   # ^^ error saying is_old_enough_to_watch isn't a method on self
+    #     true
+    #   else
+    #     false
+    #   end
+    # else
+    #   false
+    # end
+
 
   def check_out_movie m
     movies = self.movies.count

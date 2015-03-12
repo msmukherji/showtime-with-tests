@@ -9,7 +9,7 @@ class MoviesController < ApplicationController
     if current_user.stream_movie movie
       head :ok
     else
-      render :json => {:error => "Permission denied."}
+      render :json => {:error => "Permission denied."}, status: 401
     end
   end
 
@@ -18,5 +18,5 @@ class MoviesController < ApplicationController
 
   def checkin
   end
-  
+
 end

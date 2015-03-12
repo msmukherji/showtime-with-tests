@@ -25,11 +25,9 @@ describe MoviesController do
     movie = FactoryGirl.create :movie, rating: "pg-13"
    
     post :stream, movie_id: movie.id
-    # ^^ fails because u/u.age disapppears 
-    # at 2nd layer of user functions-- why?
-    expect(u.stream_movie).to eq true
-    #expect(response.code.to_i).to eq 200
-
+    u.reload
+    expect(u.stream_movie movie).to eq true
+    expect(response.code.to_i).to eq 200
   end
 
   it "cant stream movies without streaming plan" do
@@ -39,7 +37,9 @@ describe MoviesController do
     movie = FactoryGirl.create :movie, rating: "pg-13"
    
     post :stream, movie_id: movie.id
-    expect(response.code.to_i).to eq 500
+    u.reload
+    expect(u.stream_movie movie).to eq false
+    expect(response.code.to_i).to eq 401
   end
 
   it "cant stream age inappropriate movies" do
@@ -49,7 +49,8 @@ describe MoviesController do
     movie = FactoryGirl.create :movie, rating: "r"
 
     post :stream, movie_id: movie.id
-    expect(response.code.to_i).to eq 500
+    expect(u.stream_movie movie).to eq false
+    expect(response.code.to_i).to eq 401
   end
 
   
