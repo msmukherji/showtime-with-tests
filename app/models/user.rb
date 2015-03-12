@@ -7,32 +7,6 @@ class User < ActiveRecord::Base
   has_many :user_movies
   has_many :movies, through: :user_movies
 
-  # extend ActiveModel::Naming
-
-  # def initialize
-  #   @errors = ActiveModel::Errors.new(self)
-  # end
-
-  # attr_accessor :user
-  # attr_reader   :errors
-
-  # def validate!
-  #   errors.add(:user, "not old enough") if user.age?....
-  # end
-
-  # # The following methods are needed to be minimally implemented
-
-  # def read_attribute_for_validation(attr)
-  #   send(attr)
-  # end
-
-  # def Person.human_attribute_name(attr, options = {})
-  #   attr
-  # end
-
-  # def Person.lookup_ancestors
-  #   [self]
-  # end
   def is_old_enough_to_watch movie
 
     rating = movie.rating
