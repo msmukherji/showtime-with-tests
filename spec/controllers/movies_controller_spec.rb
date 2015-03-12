@@ -54,11 +54,55 @@ describe MoviesController do
   end
 
   
-  it "can check out movies"
+  it "can check out movies" do 
+    u = FactoryGirl.create :user, age: 17, plan: 1
+    login u
 
-  it "cant check out more movies than plan allows"
+    movie = FactoryGirl.create :movie
+   
+    post :checkout, movie_id: movie.id
+    u.reload
+    expect(response.code.to_i).to eq 200
+  end
 
-  it "cant check out age inappropriate movies"
+  it "cant check out more movies than plan allows" do
+    u = FactoryGirl.create :user, age: 17, plan: 1
+    login u
 
-  it "can check in movies"
+    movie1 = FactoryGirl.create :movie
+    movie2 = FactoryGirl.create :movie
+    
+    post :checkout, movie_id: movie1.id
+    u.reload
+    post :checkout, movie_id: movie2.id
+    u.reload
+    expect(response.code.to_i).to eq 401
+  end
+
+  it "cant check out age inappropriate movies" do
+    u = FactoryGirl.create :user, age: 14, plan: 1
+    login u
+
+    movie = FactoryGirl.create :movie, rating: "r"
+    
+    post :checkout, movie_id: movie.id
+    u.reload
+    expect(response.code.to_i).to eq 401
+  end
+
+  it "can check in movies" do
+    u = FactoryGirl.create :user
+    login u
+
+    m = FactoryGirl.create :movie
+
+    UserMovie.create(user_id: u.id, movie_id: m.id)
+    umct = UserMovie.count
+    post :checkin, movie_id: m.id
+    u.reload
+    expect(response.code.to_i).to eq 200
+    expect(UserMovie.count).to eq umct - 1
+    expect(u.movies).not_to include m 
+  end
+
 end

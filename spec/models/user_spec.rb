@@ -10,8 +10,20 @@ describe User do
   it "can stream movies" do
     user  = FactoryGirl.create :user, age: 13, stream: true
     movie = FactoryGirl.create :movie, rating: "pg"
+    
+    expect(user.stream_movie movie).to eq true
 
-    expect(user.stream_movie).to eq true
+    user2 = FactoryGirl.create :user, age: 13, stream: false
+    expect(user2.stream_movie movie).to eq false
+  end
+
+  it "is old enough to watch movie" do
+    user1 = FactoryGirl.create :user, age: 17, stream: true
+    user2 = FactoryGirl.create :user, age: 14, stream: true
+    movie = FactoryGirl.create :movie, rating: "r"
+
+    expect(user1.stream_movie movie).to eq true
+    expect(user2.stream_movie movie).to eq false
   end
 
   it "can check out movies" do
@@ -43,9 +55,9 @@ describe User do
     expect(user.movies.count).to eq 0
   end  
 
-  it "is old enough to watch movie"
-
   
+
+
 
 end
 

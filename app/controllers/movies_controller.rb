@@ -14,9 +14,21 @@ class MoviesController < ApplicationController
   end
 
   def checkout
+    movie = Movie.where(id: params[:movie_id]).first!
+    if current_user.check_out_movie movie
+      head :ok
+    else
+      render :json => {:error => "Permission denied."}, status: 401
+    end
   end
 
   def checkin
+    movie = Movie.where(id: params[:movie_id]).first!
+    if current_user.check_in_movie movie 
+      head :ok
+    else
+      render :json => {:error => "Unsuccessful."}, status: 404
+    end
   end
 
 end
