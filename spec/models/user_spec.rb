@@ -37,8 +37,8 @@ describe User do
   end
 
   it "cant check out movies if not of age" do
-    user = FactoryGirl.create :user, age: 13, plan: 1
-    movie = FactoryGirl.create :movie, rating: "r"
+    user = FactoryGirl.create :user, age: 7, plan: 1
+    movie = FactoryGirl.create :movie, rating: "pg-13"
 
     expect(user.movies.count).to eq 0
     user.check_out_movie movie

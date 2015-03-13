@@ -44,7 +44,9 @@ class User < ActiveRecord::Base
   end
 
   def check_in_movie m
-    UserMovie.find_by(user_id: self.id, movie_id: m.id).delete
+    if self.movies.include? m
+      UserMovie.find_by(user_id: self.id, movie_id: m.id).delete
+    end
   end
 
 end

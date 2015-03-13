@@ -105,4 +105,24 @@ describe MoviesController do
     expect(u.movies).not_to include m 
   end
 
+  it "cant check in movies it hasnt checked out" do
+    u = FactoryGirl.create :user, age: 30, plan: 1
+    login u
+
+    m1 = FactoryGirl.create :movie
+    m2 = FactoryGirl.create :movie
+
+    post :checkout, movie_id: m1.id
+    umct = UserMovie.count
+    expect(u.movies).to include m1
+    expect(u.movies).not_to include m2
+    post :checkin, movie_id: m2.id
+    u.reload
+
+    expect(response.code.to_i).to eq 401
+    expect(UserMovie.count).to eq umct
+    expect(u.movies).to include m1
+    expect(u.movies).not_to include m2
+  end
+
 end

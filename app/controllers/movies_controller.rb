@@ -27,7 +27,7 @@ class MoviesController < ApplicationController
     if current_user.check_in_movie movie 
       head :ok
     else
-      render :json => {:error => "Unsuccessful."}, status: 404
+      render :json => {:error => "Unsuccessful."}, status: 401
     end
   end
 
