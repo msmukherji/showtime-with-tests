@@ -7,7 +7,7 @@ class MoviesController < ApplicationController
   def stream
     movie = Movie.where(id: params[:movie_id]).first!
     if current_user.stream_movie movie
-      head :ok
+      render :json => {title: movie.title}, status: :ok
     else
       render :json => {:error => "Permission denied."}, status: 401
     end
@@ -16,7 +16,7 @@ class MoviesController < ApplicationController
   def checkout
     movie = Movie.where(id: params[:movie_id]).first!
     if current_user.check_out_movie movie
-      head :ok
+      render :json => {title: movie.title}, status: :ok
     else
       render :json => {:error => "Permission denied."}, status: 401
     end
